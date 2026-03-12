@@ -101,9 +101,10 @@ Upload: `stock_history.xlsx`
 | [React 18](https://react.dev/) | UI framework |
 | [Vite](https://vitejs.dev/) | Build tool and dev server |
 | [Tailwind CSS](https://tailwindcss.com/) | Styling |
-| [SheetJS (xlsx)](https://sheetjs.com/) | Excel/CSV parsing in the browser |
+| [PapaParse](https://www.papaparse.com/) | CSV parsing in the browser |
+| [read-excel-file](https://github.com/catamphetamine/read-excel-file) | Excel (XLSX) parsing in the browser |
+| [write-excel-file](https://github.com/catamphetamine/write-excel-file) | Excel export and download in the browser |
 | [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/) | Charts |
-| [FileSaver.js](https://github.com/eligrey/FileSaver.js/) | Excel export and download |
 
 ---
 

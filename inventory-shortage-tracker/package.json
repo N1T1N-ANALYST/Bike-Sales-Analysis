@@ -10,14 +10,12 @@
   },
   "dependencies": {
     "chart.js": "^4.4.0",
-    "file-saver": "^2.0.5",
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "read-excel-file": "^7.0.2",
-    "write-excel-file": "^3.0.6",
-    "xlsx": "^0.18.5"
+    "write-excel-file": "^3.0.6"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",

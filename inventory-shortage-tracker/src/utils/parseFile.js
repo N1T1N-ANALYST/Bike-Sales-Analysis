@@ -1,4 +1,22 @@
-import * as XLSX from 'xlsx'
+import Papa from 'papaparse'
+import readXlsxFile, { readSheetNames } from 'read-excel-file/browser'
+
+/**
+ * Convert a 2-D array of cell values (rows[0] = headers) into an array of objects.
+ * @param {Array[]} rows
+ * @returns {Object[]}
+ */
+function rowsToObjects(rows) {
+  if (rows.length === 0) return []
+  const headers = rows[0].map((h) => (h == null ? '' : String(h)))
+  return rows.slice(1).map((row) => {
+    const obj = {}
+    headers.forEach((h, i) => {
+      obj[h] = row[i] == null ? '' : row[i]
+    })
+    return obj
+  })
+}
 
 /**
  * Parse a CSV or Excel file and return an array of row objects.
@@ -6,23 +24,18 @@ import * as XLSX from 'xlsx'
  * @returns {Promise<Object[]>}
  */
 export function parseCSVOrExcel(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const data = new Uint8Array(e.target.result)
-        const workbook = XLSX.read(data, { type: 'array', cellDates: true })
-        const sheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[sheetName]
-        const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '' })
-        resolve(rows)
-      } catch (err) {
-        reject(err)
-      }
-    }
-    reader.onerror = reject
-    reader.readAsArrayBuffer(file)
-  })
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    return new Promise((resolve, reject) => {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => resolve(results.data),
+        error: reject,
+      })
+    })
+  }
+  // XLSX / XLS
+  return readXlsxFile(file).then(rowsToObjects)
 }
 
 /**
@@ -30,23 +43,13 @@ export function parseCSVOrExcel(file) {
  * @param {File} file
  * @returns {Promise<Object.<string, Object[]>>}
  */
-export function parseMultiSheet(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const data = new Uint8Array(e.target.result)
-        const workbook = XLSX.read(data, { type: 'array', cellDates: true })
-        const result = {}
-        workbook.SheetNames.forEach((name) => {
-          result[name] = XLSX.utils.sheet_to_json(workbook.Sheets[name], { defval: '' })
-        })
-        resolve(result)
-      } catch (err) {
-        reject(err)
-      }
-    }
-    reader.onerror = reject
-    reader.readAsArrayBuffer(file)
-  })
+export async function parseMultiSheet(file) {
+  const sheetNames = await readSheetNames(file)
+  const result = {}
+  for (const name of sheetNames) {
+    const rows = await readXlsxFile(file, { sheet: name })
+    result[name] = rowsToObjects(rows)
+  }
+  return result
 }
+
