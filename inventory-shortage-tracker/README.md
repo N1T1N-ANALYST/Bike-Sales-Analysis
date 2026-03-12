@@ -1,10 +1,27 @@
 # 📦 Inventory Shortage Tracker
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/N1T1N-ANALYST/Bike-Sales-Analysis/blob/main/Open_In_Colab.ipynb)
+
 A **fully self-contained, browser-based** Inventory Shortage Tracker web application built with React + Vite + Tailwind CSS. No backend, no downloads, no Python required — everything runs 100% in the browser.
 
 ---
 
 ## 🚀 How to Run
+
+### ☁️ Option A — Google Colab (no install needed)
+
+Click the badge above, or open this link directly:
+👉 **[Open in Google Colab](https://colab.research.google.com/github/N1T1N-ANALYST/Bike-Sales-Analysis/blob/main/Open_In_Colab.ipynb)**
+
+The notebook will:
+1. Install Node.js inside Colab
+2. Clone this repository
+3. Build the React app
+4. Give you a **live public URL** to open in your browser
+
+Just press **Runtime → Run all** and click the URL that appears.
+
+### 💻 Option B — Run locally
 
 ```bash
 cd inventory-shortage-tracker
