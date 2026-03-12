@@ -1,24 +1,26 @@
-import React from 'react'
-import { saveAs } from 'file-saver'
-import * as XLSX from 'xlsx'
+import React, { useState } from 'react'
+import { exportToExcel } from '../utils/exportToExcel.js'
 
 export default function ExportButton({ data, filename = 'export.xlsx', label = 'Export to Excel' }) {
-  const handleExport = () => {
+  const [exporting, setExporting] = useState(false)
+
+  const handleExport = async () => {
     if (!data || data.length === 0) return
-    const ws = XLSX.utils.json_to_sheet(data)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Report')
-    const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-    saveAs(new Blob([buf], { type: 'application/octet-stream' }), filename)
+    setExporting(true)
+    try {
+      await exportToExcel(data, filename)
+    } finally {
+      setExporting(false)
+    }
   }
 
   return (
     <button
       onClick={handleExport}
-      disabled={!data || data.length === 0}
+      disabled={!data || data.length === 0 || exporting}
       className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
     >
-      📥 {label}
+      📥 {exporting ? 'Exporting…' : label}
     </button>
   )
 }
